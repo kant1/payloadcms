@@ -90,7 +90,7 @@ const BlocksField: React.FC<Props> = (props) => {
     value,
     rows = [],
     valid,
-  } = useField<number>({
+  } = useField<[]>({
     path,
     validate: memoizedValidate,
     condition,
@@ -98,7 +98,7 @@ const BlocksField: React.FC<Props> = (props) => {
   });
 
   const addRow = useCallback(async (rowIndex: number, blockType: string) => {
-    addFieldRow({
+    await addFieldRow({
       path,
       rowIndex,
       data: {
@@ -112,7 +112,7 @@ const BlocksField: React.FC<Props> = (props) => {
     }, 0);
   }, [addFieldRow, path, setModified]);
 
-  const duplicateRow = useCallback(async (rowIndex: number) => {
+  const duplicateRow = useCallback((rowIndex: number) => {
     dispatchFields({ type: 'DUPLICATE_ROW', rowIndex, path });
     setModified(true);
 
@@ -121,8 +121,8 @@ const BlocksField: React.FC<Props> = (props) => {
     }, 0);
   }, [dispatchFields, path, setModified]);
 
-  const removeRow = useCallback((rowIndex: number) => {
-    removeFieldRow({ path, rowIndex });
+  const removeRow = useCallback(async (rowIndex: number) => {
+    await removeFieldRow({ path, rowIndex });
     setModified(true);
   }, [path, removeFieldRow, setModified]);
 
@@ -131,11 +131,11 @@ const BlocksField: React.FC<Props> = (props) => {
     setModified(true);
   }, [dispatchFields, path, setModified]);
 
-  const toggleCollapseAll = useCallback(async (collapsed: boolean) => {
+  const toggleCollapseAll = useCallback((collapsed: boolean) => {
     dispatchFields({ type: 'SET_ALL_ROWS_COLLAPSED', path, collapsed, setDocFieldPreferences });
   }, [dispatchFields, path, setDocFieldPreferences]);
 
-  const setCollapse = useCallback(async (rowID: string, collapsed: boolean) => {
+  const setCollapse = useCallback((rowID: string, collapsed: boolean) => {
     dispatchFields({ type: 'SET_ROW_COLLAPSED', path, collapsed, rowID, setDocFieldPreferences });
   }, [dispatchFields, path, setDocFieldPreferences]);
 
@@ -290,7 +290,7 @@ const BlocksField: React.FC<Props> = (props) => {
             drawerSlug={drawerSlug}
             blocks={blocks}
             addRow={addRow}
-            addRowIndex={value}
+            addRowIndex={value?.length || 0}
             labels={labels}
           />
         </Fragment>

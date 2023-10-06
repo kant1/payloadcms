@@ -92,7 +92,7 @@ const ArrayFieldType: React.FC<Props> = (props) => {
     value,
     rows = [],
     valid,
-  } = useField<number>({
+  } = useField<[]>({
     path,
     validate: memoizedValidate,
     condition,
@@ -108,17 +108,17 @@ const ArrayFieldType: React.FC<Props> = (props) => {
     }, 0);
   }, [addFieldRow, path, setModified]);
 
-  const duplicateRow = useCallback(async (rowIndex: number) => {
+  const duplicateRow = useCallback((rowIndex: number) => {
     dispatchFields({ type: 'DUPLICATE_ROW', rowIndex, path });
     setModified(true);
 
     setTimeout(() => {
-      scrollToID(`${path}-row-${rowIndex + 1}`);
+      scrollToID(`${path}-row-${rowIndex}`);
     }, 0);
   }, [dispatchFields, path, setModified]);
 
-  const removeRow = useCallback((rowIndex: number) => {
-    removeFieldRow({ rowIndex, path });
+  const removeRow = useCallback(async (rowIndex: number) => {
+    await removeFieldRow({ rowIndex, path });
     setModified(true);
   }, [removeFieldRow, path, setModified]);
 
@@ -127,11 +127,11 @@ const ArrayFieldType: React.FC<Props> = (props) => {
     setModified(true);
   }, [dispatchFields, path, setModified]);
 
-  const toggleCollapseAll = useCallback(async (collapsed: boolean) => {
+  const toggleCollapseAll = useCallback((collapsed: boolean) => {
     dispatchFields({ type: 'SET_ALL_ROWS_COLLAPSED', path, collapsed, setDocFieldPreferences });
   }, [dispatchFields, path, setDocFieldPreferences]);
 
-  const setCollapse = useCallback(async (rowID: string, collapsed: boolean) => {
+  const setCollapse = useCallback((rowID: string, collapsed: boolean) => {
     dispatchFields({ type: 'SET_ROW_COLLAPSED', path, collapsed, rowID, setDocFieldPreferences });
   }, [dispatchFields, path, setDocFieldPreferences]);
 
@@ -269,7 +269,7 @@ const ArrayFieldType: React.FC<Props> = (props) => {
             buttonStyle="icon-label"
             iconStyle="with-border"
             iconPosition="left"
-            onClick={() => addRow(value as number)}
+            onClick={() => addRow(value?.length || 0)}
           >
             {t('addLabel', { label: getTranslation(labels.singular, i18n) })}
           </Button>

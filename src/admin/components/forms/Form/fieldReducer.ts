@@ -100,7 +100,7 @@ export function fieldReducer(state: Fields, action: FieldAction): Fields {
         ...remainingFields,
         [path]: {
           ...state[path],
-          value: rows.length,
+          value: rows,
           disableFormData: rows.length > 0,
           rows: rowsMetadata,
         },
@@ -115,7 +115,7 @@ export function fieldReducer(state: Fields, action: FieldAction): Fields {
 
       const rowsMetadata = [...state[path]?.rows || []];
       rowsMetadata.splice(
-        rowIndex + 1,
+        rowIndex,
         0,
         // new row
         {
@@ -137,14 +137,14 @@ export function fieldReducer(state: Fields, action: FieldAction): Fields {
       const { remainingFields, rows } = separateRows(path, state);
 
       // actual form state (value saved in db)
-      rows.splice(rowIndex + 1, 0, subFieldState);
+      rows.splice(rowIndex, 0, subFieldState);
 
       const newState: Fields = {
         ...remainingFields,
         ...flattenRows(path, rows),
         [path]: {
           ...state[path],
-          value: rows.length,
+          value: rows,
           disableFormData: true,
           rows: rowsMetadata,
         },
@@ -213,7 +213,7 @@ export function fieldReducer(state: Fields, action: FieldAction): Fields {
         ...remainingFields,
         [path]: {
           ...state[path],
-          value: rows.length,
+          value: rows,
           disableFormData: true,
           rows: rowsMetadata,
         },
